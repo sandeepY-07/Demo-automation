@@ -14,14 +14,20 @@ def click_contact(driver):
     contact.click_contact_menu()
 
 
-@when(parsers.parse(
-    'user enters contact email "{email}"'
-))
-def enter_email(driver, email):
+@when("user enters registered contact name")
+def enter_registered_name(driver):
+
+    import json
 
     contact = ContactPage(driver)
 
-    contact.enter_email(email)
+    with open("data/users.json") as file:
+
+        data = json.load(file)
+
+    contact.enter_name(
+        data["username"]
+    )
 
 
 @when(parsers.parse(

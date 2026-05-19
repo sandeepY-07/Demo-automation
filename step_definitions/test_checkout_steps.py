@@ -24,14 +24,20 @@ def click_place_order(driver):
     checkout.click_place_order()
 
 
-@when(parsers.parse(
-    'user enters name "{name}"'
-))
-def enter_name(driver, name):
+@when("user enters checkout username")
+def enter_checkout_username(driver):
+
+    import json
 
     checkout = CheckoutPage(driver)
 
-    checkout.enter_name(name)
+    with open("data/users.json") as file:
+
+        data = json.load(file)
+
+    checkout.enter_name(
+        data["username"]
+    )
 
 
 @when(parsers.parse(

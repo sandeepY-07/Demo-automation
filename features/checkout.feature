@@ -4,7 +4,7 @@ Feature: Checkout Functionality
 
         Given product is already added to cart
         When user clicks place order
-        And user enters name "Sandeep"
+        And user enters checkout username
         And user enters country "India"
         And user enters city "Chennai"
         And user enters card "123456"
