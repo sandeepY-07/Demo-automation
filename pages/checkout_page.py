@@ -10,17 +10,35 @@ class CheckoutPage(BasePage):
         "//button[text()='Place Order']"
     )
 
-    NAME = (By.ID, "name")
+    NAME = (
+        By.ID,
+        "name"
+    )
 
-    COUNTRY = (By.ID, "country")
+    COUNTRY = (
+        By.ID,
+        "country"
+    )
 
-    CITY = (By.ID, "city")
+    CITY = (
+        By.ID,
+        "city"
+    )
 
-    CARD = (By.ID, "card")
+    CARD = (
+        By.ID,
+        "card"
+    )
 
-    MONTH = (By.ID, "month")
+    MONTH = (
+        By.ID,
+        "month"
+    )
 
-    YEAR = (By.ID, "year")
+    YEAR = (
+        By.ID,
+        "year"
+    )
 
     PURCHASE = (
         By.XPATH,
@@ -34,36 +52,60 @@ class CheckoutPage(BasePage):
 
     def click_place_order(self):
 
-        self.click_element(self.PLACE_ORDER)
+        self.click_element(
+            self.PLACE_ORDER
+        )
 
     def enter_name(self, name):
 
-        self.enter_text(self.NAME, name)
+        self.enter_text(
+            self.NAME,
+            name
+        )
 
     def enter_country(self, country):
 
-        self.enter_text(self.COUNTRY, country)
+        self.enter_text(
+            self.COUNTRY,
+            country
+        )
 
     def enter_city(self, city):
 
-        self.enter_text(self.CITY, city)
+        self.enter_text(
+            self.CITY,
+            city
+        )
 
     def enter_card(self, card):
 
-        self.enter_text(self.CARD, card)
+        self.enter_text(
+            self.CARD,
+            card
+        )
 
     def enter_month(self, month):
 
-        self.enter_text(self.MONTH, month)
+        self.enter_text(
+            self.MONTH,
+            month
+        )
 
     def enter_year(self, year):
 
-        self.enter_text(self.YEAR, year)
+        self.enter_text(
+            self.YEAR,
+            year
+        )
 
     def click_purchase(self):
 
-        self.click_element(self.PURCHASE)
+        self.click_element(
+            self.PURCHASE
+        )
 
     def get_success_message(self):
 
-        return self.get_text(self.SUCCESS_MESSAGE)
+        return self.get_text(
+            self.SUCCESS_MESSAGE
+        )
