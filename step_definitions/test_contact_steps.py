@@ -1,4 +1,9 @@
-from pytest_bdd import scenarios, given, when, then, parsers
+from pytest_bdd import scenarios, given, when, then
+
+import json
+import time
+
+from selenium.webdriver.common.keys import Keys
 
 from pages.contact_page import ContactPage
 
@@ -14,10 +19,18 @@ def click_contact(driver):
     contact.click_contact_menu()
 
 
+@when("user enters contact email")
+def enter_email(driver):
+
+    contact = ContactPage(driver)
+
+    contact.enter_email(
+        "test@gmail.com"
+    )
+
+
 @when("user enters registered contact name")
 def enter_registered_name(driver):
-
-    import json
 
     contact = ContactPage(driver)
 
@@ -30,24 +43,14 @@ def enter_registered_name(driver):
     )
 
 
-@when(parsers.parse(
-    'user enters contact name "{name}"'
-))
-def enter_name(driver, name):
+@when("user enters message")
+def enter_message(driver):
 
     contact = ContactPage(driver)
 
-    contact.enter_name(name)
-
-
-@when(parsers.parse(
-    'user enters message "{message}"'
-))
-def enter_message(driver, message):
-
-    contact = ContactPage(driver)
-
-    contact.enter_message(message)
+    contact.enter_message(
+        "Testing contact module"
+    )
 
 
 @when("user clicks send message button")
@@ -68,3 +71,9 @@ def verify_contact(driver):
     )
 
     assert "Thanks" in alert_text
+
+    time.sleep(2)
+
+    driver.switch_to.active_element.send_keys(
+        Keys.ESCAPE
+    )

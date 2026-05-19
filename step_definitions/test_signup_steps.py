@@ -1,24 +1,25 @@
 from pytest_bdd import scenarios, given, when, then
 
-from faker import Faker
-import random
 import json
+import random
+import time
+
+from selenium.webdriver.common.keys import Keys
 
 from pages.signup_page import SignupPage
 
-
-fake = Faker()
 
 scenarios("../features/signup.feature")
 
 
 @given("user is on homepage")
-def open_homepage(driver):
+def open_website(driver):
+    # driver fixture already opens the homepage in conftest
     pass
 
 
 @when("user clicks signup menu")
-def click_signup_menu(driver):
+def click_signup(driver):
 
     signup = SignupPage(driver)
 
@@ -30,21 +31,11 @@ def enter_signup_username(driver):
 
     signup = SignupPage(driver)
 
-    username = (
-        fake.user_name() +
-        str(random.randint(1000, 9999))
-    )
+    username = "user" + str(random.randint(1000, 9999))
 
-    password = "test@123"
-
-    # Store data in json
-    user_data = {
-        "username": username,
-        "password": password
-    }
-
+    # save generated credentials for later use
     with open("data/users.json", "w") as file:
-        json.dump(user_data, file, indent=4)
+        json.dump({"username": username}, file)
 
     signup.enter_username(username)
 
@@ -54,10 +45,21 @@ def enter_signup_password(driver):
 
     signup = SignupPage(driver)
 
-    with open("data/users.json") as file:
-        data = json.load(file)
+    password = "test@123"
 
-    signup.enter_password(data["password"])
+    # append password to the saved file
+    try:
+        with open("data/users.json", "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        data = {}
+
+    data["password"] = password
+
+    with open("data/users.json", "w") as file:
+        json.dump(data, file)
+
+    signup.enter_password(password)
 
 
 @when("user clicks signup button")
@@ -75,4 +77,14 @@ def verify_signup(driver):
 
     alert_text = signup.wait_for_alert_and_accept()
 
-    assert "Sign up successful" in alert_text
+    assert "Sign up successful." in alert_text
+
+    time.sleep(1)
+
+    # close the signup modal if it's still open
+    try:
+        driver.switch_to.active_element.send_keys(Keys.ESCAPE)
+    except Exception:
+        pass
+
+    time.sleep(1)

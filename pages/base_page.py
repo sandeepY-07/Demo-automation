@@ -3,6 +3,7 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 class BasePage:
@@ -12,19 +13,25 @@ class BasePage:
         self.driver = driver
 
     def click_element(self, locator):
+        try:
+            element = WebDriverWait(
+                self.driver,
+                10
+            ).until(
+                EC.element_to_be_clickable(locator)
+            )
 
-        element = WebDriverWait(
-            self.driver,
-            10
-        ).until(
-            EC.element_to_be_clickable(locator)
-        )
+            time.sleep(0.5)
 
-        time.sleep(1)
+            element.click()
 
-        element.click()
+            time.sleep(0.5)
 
-        time.sleep(1)
+        except TimeoutException:
+            # fallback: try to find the element and click via JS (helps with overlays)
+            elem = self.driver.find_element(*locator)
+            self.driver.execute_script("arguments[0].click();", elem)
+            time.sleep(0.5)
 
     def enter_text(self, locator, text):
 
